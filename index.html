@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>华安信 | 展会产品资料下载</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #1c2d4e 0%, #243a65 35%, #1a3258 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #e2e8f0;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 动态网格背景 */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 212, 255, 0.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.07) 1px, transparent 1px);
+            background-size: 45px 45px;
+            animation: gridMove 25s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* 辉光球 */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(0, 180, 255, 0.12), rgba(0, 160, 100, 0.05), transparent 65%);
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+            animation: glowPulse 7s ease-in-out infinite;
+        }
+
+        @keyframes gridMove {
+            from { transform: translateY(0); }
+            to { transform: translateY(45px); }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.12); }
+        }
+
+        .container {
+            max-width: 440px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 玻璃态卡片 */
+        .glass-card {
+            background: rgba(40, 55, 85, 0.82);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border: 1px solid rgba(0, 212, 255, 0.28);
+            border-radius: 22px;
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.35),
+                0 0 50px rgba(0, 212, 255, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+        }
+
+        /* Logo 区域 */
+        .logo-section {
+            background: linear-gradient(180deg, #ffffff 0%, #eef2fb 100%);
+            padding: 34px 30px 26px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(0, 144, 74, 0.5), rgba(0, 160, 255, 0.5), transparent);
+        }
+
+        .logo {
+            max-width: 170px;
+            width: 100%;
+            height: auto;
+
+        }
+
+        .page-title {
+            font-size: 14px;
+            color: #475569;
+            margin-top: 12px;
+            letter-spacing: 3px;
+            font-weight: 500;
+        }
+
+        /* 表单区域 */
+        .form-section {
+            padding: 30px 28px 28px;
+        }
+
+        .intro-text {
+            text-align: center;
+            font-size: 14px;
+            color: #a8b8d4;
+            margin-bottom: 26px;
+            line-height: 1.6;
+        }
+
+        .intro-text .sub-hint {
+            display: block;
+            font-size: 12px;
+            color: #6b7e9e;
+            margin-top: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #a0b0cc;
+            margin-bottom: 7px;
+            letter-spacing: 0.3px;
+        }
+
+        .required-mark {
+            color: #00d4ff;
+            font-size: 12px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            border-radius: 10px;
+            font-size: 16px;
+            color: #e8edf5;
+            transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(140, 155, 180, 0.5);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: rgba(0, 212, 255, 0.7);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1), 0 0 22px rgba(0, 212, 255, 0.18);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-group input.input-error {
+            border-color: rgba(239, 68, 68, 0.6);
+        }
+
+        .error-msg {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-msg.show { display: block; }
+
+        /* 隐私区域 */
+        .privacy-section {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(0, 212, 255, 0.12);
+            border-radius: 10px;
+            padding: 13px 16px;
+            margin-bottom: 24px;
+        }
+
+        .privacy-section summary {
+            font-size: 13px;
+            color: #8898b8;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.2s;
+        }
+
+        .privacy-section summary:hover { color: #b0c0dc; }
+
+        .privacy-section .privacy-content {
+            font-size: 12px;
+            color: #8898b8;
+            line-height: 1.9;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(0, 212, 255, 0.08);
+        }
+
+        .privacy-section .privacy-content p { margin-bottom: 3px; }
+        .privacy-section .privacy-content strong { color: #b0c0dc; }
+
+        /* 提交按钮 */
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #0a1530;
+            background: linear-gradient(135deg, #00e0ff, #0096ff);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+            box-shadow: 0 0 24px rgba(0, 212, 255, 0.35);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .submit-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+            animation: shimmer 3.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -60%; }
+            60%, 100% { left: 160%; }
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 0 34px rgba(0, 212, 255, 0.55);
+        }
+
+        .submit-btn:active:not(:disabled) { transform: translateY(0); }
+        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(10, 21, 48, 0.25);
+            border-top-color: #0a1530;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .hidden { display: none !important; }
+
+        /* 成功区域 */
+        .success-section {
+            padding: 42px 30px 35px;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 22px;
+            border-radius: 50%;
+            background: rgba(0, 230, 118, 0.15);
+            border: 2px solid rgba(0, 230, 118, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 35px rgba(0, 230, 118, 0.25);
+            animation: pop 0.5s ease;
+        }
+
+        .success-icon svg {
+            width: 36px;
+            height: 36px;
+            fill: none;
+            stroke: #00e676;
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.25); }
+            100% { transform: scale(1); }
+        }
+
+        .success-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #e8edf5;
+            margin-bottom: 8px;
+        }
+
+        .success-subtitle {
+            font-size: 14px;
+            color: #a0b0cc;
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+
+        .download-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #0a1530;
+            background: linear-gradient(135deg, #00e676, #00c853);
+            text-decoration: none;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+            box-shadow: 0 0 24px rgba(0, 230, 118, 0.35);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 34px rgba(0, 230, 118, 0.55);
+        }
+
+        .copy-area { margin-top: 14px; }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 22px;
+            font-size: 13px;
+            color: #8898b8;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .copy-btn:hover {
+            border-color: rgba(0, 212, 255, 0.5);
+            color: #00d4ff;
+            background: rgba(0, 212, 255, 0.06);
+        }
+
+        .instructions {
+            font-size: 12px;
+            color: #6b7e9e;
+            margin-top: 18px;
+            line-height: 1.7;
+        }
+
+        .countdown-area {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(0, 212, 255, 0.08);
+            font-size: 13px;
+            color: #6b7e9e;
+        }
+
+        .countdown-area .cancel-link {
+            color: #6b7e9e;
+            text-decoration: underline;
+            margin-left: 10px;
+            font-size: 12px;
+            transition: color 0.2s;
+        }
+
+        .countdown-area .cancel-link:hover { color: #a0b0cc; }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 12px;
+            color: rgba(100, 116, 139, 0.5);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 380px) {
+            .form-section { padding: 25px 20px; }
+            .logo-section { padding: 28px 20px 22px; }
+            .success-section { padding: 36px 22px 30px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ============ 表单卡片 ============ -->
+        <div id="form-card" class="glass-card">
+            <div class="logo-section">
+                <img src="logo.png" alt="华安信 HUAANXIN" class="logo">
+                <div class="page-title">展会产品资料下载</div>
+            </div>
+
+            <div class="form-section">
+                <p class="intro-text">
+                    填写信息，获取产品介绍视频及文档
+                    <span class="sub-hint">填写表单仅用于展会联系，请放心填写</span>
+                </p>
+
+                <form id="download-form" novalidate>
+                    <div class="form-group">
+                        <label for="name">姓名 <span class="required-mark">*</span></label>
+                        <input type="text" id="name" name="name" required placeholder="请输入您的姓名" maxlength="20" autocomplete="name">
+                        <div class="error-msg" id="name-error">请输入姓名</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company">公司名称</label>
+                        <input type="text" id="company" name="company" placeholder="选填" maxlength="50" autocomplete="organization">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">联系电话 <span class="required-mark">*</span></label>
+                        <input type="tel" id="phone" name="phone" required placeholder="请输入11位手机号码" maxlength="11" autocomplete="tel">
+                        <div class="error-msg" id="phone-error">请输入正确的11位手机号码</div>
+                    </div>
+
+                    <div class="privacy-section">
+                        <details>
+                            <summary>隐私保护说明</summary>
+                            <div class="privacy-content">
+                                <p><strong>信息收集：</strong>本表单收集您的姓名、公司名称和联系电话。</p>
+                                <p><strong>使用目的：</strong>所收集信息仅用于展会期间的客户联系及展会后的产品咨询跟进，不做他用。</p>
+                                <p><strong>信息保护：</strong>华安信承诺不会将您的个人信息出售、出租或分享给任何第三方。</p>
+                                <p><strong>信息保留：</strong>您的信息将在展会结束后6个月内删除，您有权随时要求删除。</p>
+                                <p><strong>联系方式：</strong>如有疑问请联系 m17624068711@163.com</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submit-btn">
+                        提交并获取资料
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ============ 成功卡片 ============ -->
+        <div id="success-card" class="glass-card hidden">
+            <div class="success-section">
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+                <div class="success-title">提交成功</div>
+                <p class="success-subtitle">感谢您的填写，请点击下方按钮查看产品资料</p>
+
+                <a href="https://www.ilanzou.com/s/FmIKiRhE" class="download-btn" target="_blank" rel="noopener">
+                    查看产品资料
+                </a>
+
+                <div class="copy-area">
+                    <button class="copy-btn" onclick="copyLink()">复制链接</button>
+                </div>
+
+                <p class="instructions">
+                    点击链接即可查看或下载产品资料
+                </p>
+
+                <div class="countdown-area">
+                    <span id="countdown-text">5秒后自动打开产品资料</span>
+                    <a href="#" class="cancel-link" onclick="cancelRedirect(); return false;">取消自动跳转</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 华安信 HUAANXIN | 本页面仅用于展会信息收集</p>
+        </div>
+    </div>
+
+    <script>
+        /* ====================================================
+         * 配置区域（部署前请修改以下配置）
+         * ==================================================== */
+
+        // PushPlus Token —— 微信通知（必填，去 pushplus.plus 注册获取）
+        var PUSHPLUS_TOKEN = '在此填入你的PushPlus_Token';
+
+        // 产品资料下载链接（蓝奏云）
+        var DOWNLOAD_URL = 'https://www.ilanzou.com/s/FmIKiRhE';
+
+        // 邮件通知地址（FormSubmit 备用通道）
+        var FORM_EMAIL = 'm17624068711@163.com';
+
+        /* ====================================================
+         * 以下为程序逻辑，一般无需修改
+         * ==================================================== */
+
+        var redirectTimer = null;
+        var form = document.getElementById('download-form');
+        var formCard = document.getElementById('form-card');
+        var successCard = document.getElementById('success-card');
+        var submitBtn = document.getElementById('submit-btn');
+
+        document.getElementById('name').addEventListener('input', function() {
+            this.classList.remove('input-error');
+            document.getElementById('name-error').classList.remove('show');
+        });
+
+        document.getElementById('phone').addEventListener('input', function() {
+            this.classList.remove('input-error');
+            document.getElementById('phone-error').classList.remove('show');
+        });
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var name = document.getElementById('name').value.trim();
+            if (!name) {
+                document.getElementById('name').classList.add('input-error');
+                document.getElementById('name-error').classList.add('show');
+                document.getElementById('name').focus();
+                return;
+            }
+
+            var phone = document.getElementById('phone').value.trim();
+            if (!/^1[3-9]\d{9}$/.test(phone)) {
+                document.getElementById('phone').classList.add('input-error');
+                document.getElementById('phone-error').classList.add('show');
+                document.getElementById('phone').focus();
+                return;
+            }
+
+            var company = document.getElementById('company').value.trim();
+            var timestamp = new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' });
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner"></span> 提交中...';
+
+            /* --- 通道1：PushPlus 微信推送 --- */
+            var pushContent = '新客户信息提交\n\n';
+            pushContent += '姓名：' + name + '\n';
+            pushContent += '公司：' + (company || '未填写') + '\n';
+            pushContent += '电话：' + phone + '\n';
+            pushContent += '时间：' + timestamp;
+
+            var pushPromise = fetch('https://www.pushplus.plus/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    token: PUSHPLUS_TOKEN,
+                    title: '华安信展会 - 新客户：' + name,
+                    content: pushContent
+                })
+            }).catch(function() {});
+
+            /* --- 通道2：FormSubmit 邮件通知（备用） --- */
+            var emailData = {
+                '_subject': '【华安信展会】新客户：' + name,
+                '_template': 'table',
+                '姓名': name,
+                '公司': company || '未填写',
+                '电话': phone,
+                '提交时间': timestamp
+            };
+
+            var emailPromise = fetch('https://formsubmit.co/ajax/' + FORM_EMAIL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(emailData)
+            }).catch(function() {});
+
+            /* 两条通道并行发送，无论成功与否都展示下载 */
+            Promise.allSettled([pushPromise, emailPromise]).then(function() {
+                showSuccess();
+            });
+        });
+
+        function showSuccess() {
+            formCard.classList.add('hidden');
+            successCard.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            var seconds = 5;
+            var countdownEl = document.getElementById('countdown-text');
+            redirectTimer = setInterval(function() {
+                seconds--;
+                if (seconds > 0) {
+                    countdownEl.textContent = seconds + '秒后自动打开产品资料';
+                } else {
+                    clearInterval(redirectTimer);
+                    redirectTimer = null;
+                    countdownEl.textContent = '正在打开...';
+                    window.location.href = DOWNLOAD_URL;
+                }
+            }, 1000);
+        }
+
+        function cancelRedirect() {
+            if (redirectTimer) {
+                clearInterval(redirectTimer);
+                redirectTimer = null;
+            }
+            document.getElementById('countdown-text').textContent = '已取消自动跳转，请手动点击上方按钮';
+        }
+
+        function copyLink() {
+            var text = DOWNLOAD_URL;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(function() {
+                    alert('链接已复制到剪贴板');
+                }).catch(function() {
+                    fallbackCopy(text);
+                });
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            var textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                alert('链接已复制到剪贴板');
+            } catch (err) {
+                window.prompt('请手动复制以下链接：', text);
+            }
+            document.body.removeChild(textarea);
+        }
+    </script>
+</body>
+</html>
