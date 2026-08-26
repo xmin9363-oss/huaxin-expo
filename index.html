@@ -399,6 +399,84 @@
 
         .countdown-area .cancel-link:hover { color: #a0b0cc; }
 
+        /* 欢迎回来卡片 */
+        .welcome-section {
+            padding: 42px 30px 35px;
+            text-align: center;
+        }
+
+        .welcome-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 22px;
+            border-radius: 50%;
+            background: rgba(0, 212, 255, 0.15);
+            border: 2px solid rgba(0, 212, 255, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 35px rgba(0, 212, 255, 0.25);
+        }
+
+        .welcome-icon svg {
+            width: 36px;
+            height: 36px;
+            fill: none;
+            stroke: #00d4ff;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .welcome-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #e8edf5;
+            margin-bottom: 8px;
+        }
+
+        .welcome-subtitle {
+            font-size: 14px;
+            color: #a0b0cc;
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+
+        .welcome-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #0a1530;
+            background: linear-gradient(135deg, #00e676, #00c853);
+            text-decoration: none;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+            box-shadow: 0 0 24px rgba(0, 230, 118, 0.35);
+            cursor: pointer;
+        }
+
+        .welcome-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 34px rgba(0, 230, 118, 0.55);
+        }
+
+        .refill-link {
+            display: inline-block;
+            margin-top: 16px;
+            font-size: 13px;
+            color: #6b7e9e;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .refill-link:hover { color: #00d4ff; }
+
         /* 页脚 */
         .footer {
             text-align: center;
@@ -468,6 +546,27 @@
             </div>
         </div>
 
+        <!-- ============ 欢迎回来卡片 ============ -->
+        <div id="welcome-card" class="glass-card hidden">
+            <div class="logo-section">
+                <img src="logo.png" alt="华安信 HUAANXIN" class="logo">
+                <div class="page-title">展会产品资料下载</div>
+            </div>
+            <div class="welcome-section">
+                <div class="welcome-icon">
+                    <svg viewBox="0 0 24 24"><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"></path><path d="M17 21v-2a4 4 0 0 0-3-3.87"></path><path d="M5 21v-2a4 4 0 0 1 3-3.87"></path></svg>
+                </div>
+                <div class="welcome-title">欢迎回来，<span id="welcome-name"></span>！</div>
+                <p class="welcome-subtitle">您之前已填写过信息，可直接获取产品资料</p>
+
+                <button class="welcome-btn" onclick="showSuccess()">
+                    直接获取产品资料
+                </button>
+
+                <span class="refill-link" onclick="showForm()">重新填写信息</span>
+            </div>
+        </div>
+
         <!-- ============ 成功卡片 ============ -->
         <div id="success-card" class="glass-card hidden">
             <div class="success-section">
@@ -522,8 +621,28 @@
         var redirectTimer = null;
         var form = document.getElementById('download-form');
         var formCard = document.getElementById('form-card');
+        var welcomeCard = document.getElementById('welcome-card');
         var successCard = document.getElementById('success-card');
         var submitBtn = document.getElementById('submit-btn');
+
+        /* --- 页面加载时检查是否为回头客户 --- */
+        (function checkReturning() {
+            try {
+                var saved = localStorage.getItem('huaxin_customer');
+                if (saved) {
+                    var info = JSON.parse(saved);
+                    document.getElementById('welcome-name').textContent = info.name || '客户';
+                    formCard.classList.add('hidden');
+                    welcomeCard.classList.remove('hidden');
+                }
+            } catch(e) {}
+        })();
+
+        function showForm() {
+            welcomeCard.classList.add('hidden');
+            formCard.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
         document.getElementById('name').addEventListener('input', function() {
             this.classList.remove('input-error');
@@ -556,6 +675,24 @@
 
             var company = document.getElementById('company').value.trim();
             var timestamp = new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' });
+
+            /* --- 保存客户信息到 localStorage（用于回头客户识别） --- */
+            try {
+                localStorage.setItem('huaxin_customer', JSON.stringify({
+                    name: name,
+                    company: company,
+                    phone: phone
+                }));
+
+                var submissions = JSON.parse(localStorage.getItem('huaxin_submissions') || '[]');
+                submissions.push({
+                    name: name,
+                    company: company || '未填写',
+                    phone: phone,
+                    time: timestamp
+                });
+                localStorage.setItem('huaxin_submissions', JSON.stringify(submissions));
+            } catch(e) {}
 
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span class="spinner"></span> 提交中...';
