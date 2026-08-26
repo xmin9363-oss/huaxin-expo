@@ -554,7 +554,7 @@
             </div>
             <div class="welcome-section">
                 <div class="welcome-icon">
-                    <svg viewBox="0 0 24 24"><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"></path><path d="M17 21v-2a4 4 0 0 0-3-3.87"></path><path d="M5 21v-2a4 4 0 0 1 3-3.87"></path></svg>
+                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                 </div>
                 <div class="welcome-title">欢迎回来，<span id="welcome-name"></span>！</div>
                 <p class="welcome-subtitle">您之前已填写过信息，可直接获取产品资料</p>
@@ -576,7 +576,7 @@
                 <div class="success-title">提交成功</div>
                 <p class="success-subtitle">感谢您的填写，请点击下方按钮查看产品资料</p>
 
-                <a href="https://docs.qq.com/s/vtzDS1eAJozC4Qrt0E09xW" class="download-btn" target="_blank" rel="noopener">
+                <a href="#" id="download-link" class="download-btn" target="_blank" rel="noopener">
                     查看产品资料
                 </a>
 
@@ -589,7 +589,7 @@
                 </p>
 
                 <div class="countdown-area">
-                    <span id="countdown-text">5秒后自动打开产品资料</span>
+                    <span id="countdown-text">3秒后自动打开产品资料</span>
                     <a href="#" class="cancel-link" onclick="cancelRedirect(); return false;">取消自动跳转</a>
                 </div>
             </div>
@@ -624,6 +624,10 @@
         var welcomeCard = document.getElementById('welcome-card');
         var successCard = document.getElementById('success-card');
         var submitBtn = document.getElementById('submit-btn');
+        var downloadLink = document.getElementById('download-link');
+
+        /* --- 统一设置下载链接（只改 DOWNLOAD_URL 一处即可） --- */
+        if (downloadLink) downloadLink.href = DOWNLOAD_URL;
 
         /* --- 页面加载时检查是否为回头客户 --- */
         (function checkReturning() {
@@ -744,8 +748,9 @@
             successCard.classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            var seconds = 5;
+            var seconds = 3;
             var countdownEl = document.getElementById('countdown-text');
+            countdownEl.textContent = seconds + '秒后自动打开产品资料';
             redirectTimer = setInterval(function() {
                 seconds--;
                 if (seconds > 0) {
