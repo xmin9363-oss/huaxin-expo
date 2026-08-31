@@ -516,7 +516,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="company">公司名称</label>
+                        <label for="company">单位名称</label>
                         <input type="text" id="company" name="company" placeholder="选填" maxlength="50" autocomplete="organization">
                     </div>
 
@@ -530,7 +530,7 @@
                         <details>
                             <summary>隐私保护说明</summary>
                             <div class="privacy-content">
-                                <p><strong>信息收集：</strong>本表单收集您的姓名、公司名称和联系电话。</p>
+                                <p><strong>信息收集：</strong>本表单收集您的姓名、单位名称和联系电话。</p>
                                 <p><strong>使用目的：</strong>所收集信息仅用于展会期间的客户联系及展会后的产品咨询跟进，不做他用。</p>
                                 <p><strong>信息保护：</strong>华安信承诺不会将您的个人信息出售、出租或分享给任何第三方。</p>
                                 <p><strong>信息保留：</strong>您的信息将在展会结束后6个月内删除，您有权随时要求删除。</p>
@@ -704,7 +704,7 @@
             /* --- 通道1：PushPlus 微信推送 --- */
             var pushContent = '新客户信息提交\n\n';
             pushContent += '姓名：' + name + '\n';
-            pushContent += '公司：' + (company || '未填写') + '\n';
+            pushContent += '单位：' + (company || '未填写') + '\n';
             pushContent += '电话：' + phone + '\n';
             pushContent += '时间：' + timestamp;
 
@@ -723,7 +723,7 @@
                 '_subject': '【华安信展会】新客户：' + name,
                 '_template': 'table',
                 '姓名': name,
-                '公司': company || '未填写',
+                '单位': company || '未填写',
                 '电话': phone,
                 '提交时间': timestamp
             };
