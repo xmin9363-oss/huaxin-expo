@@ -108,35 +108,32 @@
         <div id="status">文档加载中，请稍候…</div>
     </main>
 
-    <script src="pdf.min.js"></script>
-    <script>
-        (function () {
-            /* 文档白名单（防止任意文件加载） */
-            var FILES = {
-                'lingqi-v1.3.pdf': '“灵启”多模态智能笔录系统 V1.3',
-                'zhifa-v2.0.pdf': '执法安全智慧监管系统 V2.0'
-            };
+    <script type="module">
+        /* 文档白名单（防止任意文件加载） */
+        const FILES = {
+            'lingqi-v1.3.pdf': '“灵启”多模态智能笔录系统 V1.3',
+            'zhifa-v2.0.pdf': '执法安全智慧监管系统 V2.0'
+        };
 
-            var status = document.getElementById('status');
-            var cv = document.getElementById('cv');
+        const status = document.getElementById('status');
+        const cv = document.getElementById('cv');
 
-            var params = new URLSearchParams(location.search);
-            var file = params.get('file') || '';
-            var title = FILES[file];
+        const params = new URLSearchParams(location.search);
+        const file = params.get('file') || '';
+        const title = FILES[file];
 
-            if (!title) {
-                status.textContent = '参数错误：未知的文档';
-                return;
-            }
-
+        if (!title) {
+            status.textContent = '参数错误：未知的文档';
+        } else {
             document.getElementById('doc-title').textContent = title;
             document.title = title + ' | 文档预览';
             document.getElementById('dl-link').href = file;
 
-            var pageNum = 1, pageCount = 0, pdfDoc = null;
-            var prevBtn = document.getElementById('prev');
-            var nextBtn = document.getElementById('next');
-            var pageInd = document.getElementById('page-ind');
+            const prevBtn = document.getElementById('prev');
+            const nextBtn = document.getElementById('next');
+            const pageInd = document.getElementById('page-ind');
+
+            let pageNum = 1, pageCount = 0, pdfDoc = null;
 
             function failMsg() {
                 status.innerHTML = '在线预览暂不可用<br><a href="' + file + '">点此下载PDF文件</a>，保存后可随时查看';
@@ -145,11 +142,11 @@
             function renderPage(n) {
                 if (!pdfDoc || n < 1 || n > pageCount) return;
                 pdfDoc.getPage(n).then(function (page) {
-                    var cssWidth = Math.min(window.innerWidth - 20, 720);
-                    var base = page.getViewport({ scale: 1 });
-                    var scale = cssWidth / base.width;
-                    var dpr = window.devicePixelRatio || 1;
-                    var viewport = page.getViewport({ scale: scale * dpr });
+                    const cssWidth = Math.min(window.innerWidth - 20, 720);
+                    const base = page.getViewport({ scale: 1 });
+                    const scale = cssWidth / base.width;
+                    const dpr = window.devicePixelRatio || 1;
+                    const viewport = page.getViewport({ scale: scale * dpr });
                     cv.width = viewport.width;
                     cv.height = viewport.height;
                     cv.style.width = (viewport.width / dpr) + 'px';
@@ -163,22 +160,23 @@
                 });
             }
 
-            if (window.pdfjsLib) {
-                pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.js';
-                pdfjsLib.getDocument(file).promise.then(function (d) {
-                    pdfDoc = d;
-                    pageCount = d.numPages;
-                    status.style.display = 'none';
-                    cv.style.display = 'block';
-                    renderPage(1);
-                }).catch(failMsg);
-            } else {
+            try {
+                const pdfjs = await import('./pdf.min.mjs');
+                pdfjs.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.mjs';
+                const doc = await pdfjs.getDocument({ url: file, rangeChunkSize: 65536 }).promise;
+                pdfDoc = doc;
+                pageCount = doc.numPages;
+                status.style.display = 'none';
+                cv.style.display = 'block';
+                renderPage(1);
+            } catch (e) {
+                console.error('PDF加载失败:', e);
                 failMsg();
             }
 
             prevBtn.addEventListener('click', function () { renderPage(pageNum - 1); });
             nextBtn.addEventListener('click', function () { renderPage(pageNum + 1); });
-        })();
+        }
     </script>
 </body>
 </html>
