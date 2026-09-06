@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文档预览 | 华安信</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(180deg, #1a2440 0%, #1c2d4e 100%);
+            min-height: 100vh;
+            color: #e2e8f0;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(24, 36, 64, 0.96);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.25);
+            padding: 10px 14px 12px;
+        }
+
+        .doc-title {
+            font-size: 15px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 9px;
+            letter-spacing: 0.5px;
+        }
+
+        .ctrl {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .ctrl button {
+            background: rgba(0, 212, 255, 0.12);
+            border: 1px solid rgba(0, 212, 255, 0.4);
+            color: #7dd3fc;
+            border-radius: 8px;
+            padding: 7px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+
+        .ctrl button:active { background: rgba(0, 212, 255, 0.28); }
+        .ctrl button:disabled { opacity: 0.35; }
+
+        #page-ind {
+            font-size: 13px;
+            color: #a0b0cc;
+            min-width: 64px;
+            text-align: center;
+        }
+
+        .dl-wrap { text-align: center; margin-top: 9px; }
+        .dl-wrap a { font-size: 13px; color: #8898b8; text-decoration: underline; }
+        .dl-wrap a:active { color: #7dd3fc; }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 14px 0 46px;
+        }
+
+        #cv {
+            display: none;
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            max-width: 100%;
+        }
+
+        #status {
+            padding: 70px 24px;
+            text-align: center;
+            color: #8898b8;
+            font-size: 14px;
+            line-height: 2.2;
+        }
+
+        #status a { color: #7dd3fc; text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="doc-title" id="doc-title">文档预览</div>
+        <div class="ctrl">
+            <button id="prev">上一页</button>
+            <span id="page-ind">— / —</span>
+            <button id="next">下一页</button>
+        </div>
+        <div class="dl-wrap"><a id="dl-link" href="#">下载PDF文件</a></div>
+    </div>
+
+    <main>
+        <canvas id="cv"></canvas>
+        <div id="status">文档加载中，请稍候…</div>
+    </main>
+
+    <script src="pdf.min.js"></script>
+    <script>
+        (function () {
+            /* 文档白名单（防止任意文件加载） */
+            var FILES = {
+                'lingqi-v1.3.pdf': '“灵启”多模态智能笔录系统 V1.3',
+                'zhifa-v2.0.pdf': '执法安全智慧监管系统 V2.0'
+            };
+
+            var status = document.getElementById('status');
+            var cv = document.getElementById('cv');
+
+            var params = new URLSearchParams(location.search);
+            var file = params.get('file') || '';
+            var title = FILES[file];
+
+            if (!title) {
+                status.textContent = '参数错误：未知的文档';
+                return;
+            }
+
+            document.getElementById('doc-title').textContent = title;
+            document.title = title + ' | 文档预览';
+            document.getElementById('dl-link').href = file;
+
+            var pageNum = 1, pageCount = 0, pdfDoc = null;
+            var prevBtn = document.getElementById('prev');
+            var nextBtn = document.getElementById('next');
+            var pageInd = document.getElementById('page-ind');
+
+            function failMsg() {
+                status.innerHTML = '在线预览暂不可用<br><a href="' + file + '">点此下载PDF文件</a>，保存后可随时查看';
+            }
+
+            function renderPage(n) {
+                if (!pdfDoc || n < 1 || n > pageCount) return;
+                pdfDoc.getPage(n).then(function (page) {
+                    var cssWidth = Math.min(window.innerWidth - 20, 720);
+                    var base = page.getViewport({ scale: 1 });
+                    var scale = cssWidth / base.width;
+                    var dpr = window.devicePixelRatio || 1;
+                    var viewport = page.getViewport({ scale: scale * dpr });
+                    cv.width = viewport.width;
+                    cv.height = viewport.height;
+                    cv.style.width = (viewport.width / dpr) + 'px';
+                    cv.style.height = 'auto';
+                    page.render({ canvasContext: cv.getContext('2d'), viewport: viewport });
+                    pageNum = n;
+                    pageInd.textContent = n + ' / ' + pageCount;
+                    prevBtn.disabled = (n <= 1);
+                    nextBtn.disabled = (n >= pageCount);
+                    window.scrollTo({ top: 0 });
+                });
+            }
+
+            if (window.pdfjsLib) {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.js';
+                pdfjsLib.getDocument(file).promise.then(function (d) {
+                    pdfDoc = d;
+                    pageCount = d.numPages;
+                    status.style.display = 'none';
+                    cv.style.display = 'block';
+                    renderPage(1);
+                }).catch(failMsg);
+            } else {
+                failMsg();
+            }
+
+            prevBtn.addEventListener('click', function () { renderPage(pageNum - 1); });
+            nextBtn.addEventListener('click', function () { renderPage(pageNum + 1); });
+        })();
+    </script>
+</body>
+</html>
