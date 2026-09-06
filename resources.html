@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>华安信 | 产品资料中心</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #1c2d4e 0%, #243a65 35%, #1a3258 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #e2e8f0;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 212, 255, 0.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.07) 1px, transparent 1px);
+            background-size: 45px 45px;
+            animation: gridMove 25s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(0, 180, 255, 0.12), rgba(0, 160, 100, 0.05), transparent 65%);
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+            animation: glowPulse 7s ease-in-out infinite;
+        }
+
+        @keyframes gridMove {
+            from { transform: translateY(0); }
+            to { transform: translateY(45px); }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.12); }
+        }
+
+        .container {
+            max-width: 560px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .glass-card {
+            background: rgba(40, 55, 85, 0.82);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border: 1px solid rgba(0, 212, 255, 0.28);
+            border-radius: 22px;
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.35),
+                0 0 50px rgba(0, 212, 255, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+        }
+
+        .logo-section {
+            background: linear-gradient(180deg, #ffffff 0%, #eef2fb 100%);
+            padding: 34px 30px 26px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(0, 144, 74, 0.5), rgba(0, 160, 255, 0.5), transparent);
+        }
+
+        .logo {
+            max-width: 170px;
+            width: 100%;
+            height: auto;
+        }
+
+        .page-title {
+            font-size: 14px;
+            color: #475569;
+            margin-top: 12px;
+            letter-spacing: 3px;
+            font-weight: 500;
+        }
+
+        .content-section { padding: 28px 26px 30px; }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #e8edf5;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title svg {
+            width: 18px;
+            height: 18px;
+            stroke: #00d4ff;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .doc-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+
+        .doc-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 14px;
+            padding: 18px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .doc-card:hover {
+            border-color: rgba(0, 212, 255, 0.5);
+            box-shadow: 0 0 24px rgba(0, 212, 255, 0.12);
+        }
+
+        .doc-info {
+            display: flex;
+            align-items: flex-start;
+            gap: 13px;
+            margin-bottom: 15px;
+        }
+
+        .doc-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 11px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .doc-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: #f87171;
+        }
+
+        .video-doc-icon {
+            background: rgba(0, 212, 255, 0.15);
+            border-color: rgba(0, 212, 255, 0.35);
+        }
+
+        .video-doc-icon svg { fill: #38bdf8; }
+
+        .doc-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #e8edf5;
+            line-height: 1.45;
+            word-break: break-all;
+        }
+
+        .doc-meta {
+            font-size: 12px;
+            color: #8898b8;
+            margin-top: 4px;
+        }
+
+        .doc-actions { display: flex; gap: 10px; }
+
+        .btn {
+            flex: 1;
+            padding: 12px 10px;
+            border: none;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-view {
+            color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.35);
+        }
+
+        .btn-view:hover {
+            background: rgba(0, 212, 255, 0.18);
+            transform: translateY(-2px);
+            box-shadow: 0 0 18px rgba(0, 212, 255, 0.25);
+        }
+
+        .btn-download {
+            color: #0a1530;
+            background: linear-gradient(135deg, #00e676, #00c853);
+            box-shadow: 0 0 20px rgba(0, 230, 118, 0.3);
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 28px rgba(0, 230, 118, 0.5);
+        }
+
+        .video-card video {
+            width: 100%;
+            border-radius: 12px;
+            background: #000;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .placeholder-card {
+            border-style: dashed;
+            border-color: rgba(0, 212, 255, 0.25);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .placeholder-text {
+            text-align: center;
+            font-size: 13px;
+            color: #6b7e9e;
+            padding: 14px 0 4px;
+            line-height: 1.7;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.25), transparent);
+            margin: 26px 0;
+        }
+
+        .tips {
+            background: rgba(0, 212, 255, 0.06);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 10px;
+            padding: 13px 16px;
+            font-size: 12px;
+            color: #8898b8;
+            line-height: 1.8;
+        }
+
+        .tips strong { color: #b0c0dc; }
+
+        .footer {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 12px;
+            color: rgba(100, 116, 139, 0.5);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 380px) {
+            .content-section { padding: 24px 18px 26px; }
+            .logo-section { padding: 28px 20px 22px; }
+            .doc-actions { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="glass-card">
+            <div class="logo-section">
+                <img src="logo.png" alt="华安信 HUAANXIN" class="logo">
+                <div class="page-title">产品资料中心</div>
+            </div>
+
+            <div class="content-section">
+                <!-- ============ 产品文档 ============ -->
+                <div class="section-title">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                    产品文档
+                </div>
+
+                <div class="doc-list">
+                    <div class="doc-card">
+                        <div class="doc-info">
+                            <div class="doc-icon">
+                                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                            </div>
+                            <div>
+                                <div class="doc-name">“灵启”多模态智能笔录系统</div>
+                                <div class="doc-meta">V1.3 · PDF · 0.9 MB</div>
+                            </div>
+                        </div>
+                        <div class="doc-actions">
+                            <a class="btn btn-view" href="lingqi-v1.3.pdf" target="_blank" rel="noopener">在线查看</a>
+                            <a class="btn btn-download" href="lingqi-v1.3.pdf" download="华安信-灵启多模态智能笔录系统V1.3.pdf">下载文件</a>
+                        </div>
+                    </div>
+
+                    <div class="doc-card">
+                        <div class="doc-info">
+                            <div class="doc-icon">
+                                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                            </div>
+                            <div>
+                                <div class="doc-name">执法安全智慧监管系统</div>
+                                <div class="doc-meta">V2.0 · PDF · 1.5 MB</div>
+                            </div>
+                        </div>
+                        <div class="doc-actions">
+                            <a class="btn btn-view" href="zhifa-v2.0.pdf" target="_blank" rel="noopener">在线查看</a>
+                            <a class="btn btn-download" href="zhifa-v2.0.pdf" download="华安信-执法安全智慧监管系统2.0.pdf">下载文件</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- ============ 产品视频 ============ -->
+                <div class="section-title">
+                    <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                    产品视频
+                </div>
+
+                <div class="doc-list">
+                    <div class="doc-card placeholder-card">
+                        <div class="doc-info">
+                            <div class="doc-icon video-doc-icon">
+                                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                            </div>
+                            <div>
+                                <div class="doc-name">产品介绍视频</div>
+                                <div class="doc-meta">MP4 · 整理上传中</div>
+                            </div>
+                        </div>
+                        <div class="placeholder-text">视频资料整理完毕后将在此上线<br>敬请期待</div>
+                    </div>
+                </div>
+
+                <div class="tips">
+                    <strong>温馨提示：</strong><br>
+                    · 点击「在线查看」可在浏览器中直接阅读文档<br>
+                    · 点击「下载文件」可保存到手机或电脑<br>
+                    · 如无法在线查看，请直接下载文件后打开
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 华安信 HUAANXIN | 本页面仅用于展会信息收集</p>
+        </div>
+    </div>
+</body>
+</html>
