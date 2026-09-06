@@ -109,6 +109,9 @@
     </main>
 
     <script type="module">
+        /* 文档与渲染引擎统一走国内 OSS，加速加载 */
+        const OSS = 'https://huaxin-expo.oss-cn-shanghai.aliyuncs.com/';
+
         /* 文档白名单（防止任意文件加载） */
         const FILES = {
             'lingqi-v1.3.pdf': '“灵启”多模态智能笔录系统 V1.3',
@@ -125,9 +128,11 @@
         if (!title) {
             status.textContent = '参数错误：未知的文档';
         } else {
+            const pdfUrl = OSS + file;
+
             document.getElementById('doc-title').textContent = title;
             document.title = title + ' | 文档预览';
-            document.getElementById('dl-link').href = file;
+            document.getElementById('dl-link').href = pdfUrl;
 
             const prevBtn = document.getElementById('prev');
             const nextBtn = document.getElementById('next');
@@ -136,7 +141,7 @@
             let pageNum = 1, pageCount = 0, pdfDoc = null;
 
             function failMsg() {
-                status.innerHTML = '在线预览暂不可用<br><a href="' + file + '">点此下载PDF文件</a>，保存后可随时查看';
+                status.innerHTML = '在线预览暂不可用<br><a href="' + pdfUrl + '">点此下载PDF文件</a>，保存后可随时查看';
             }
 
             function renderPage(n) {
@@ -161,9 +166,14 @@
             }
 
             try {
-                const pdfjs = await import('./pdf.min.mjs');
-                pdfjs.GlobalWorkerOptions.workerSrc = 'pdf.worker.min.mjs';
-                const doc = await pdfjs.getDocument({ url: file, rangeChunkSize: 65536 }).promise;
+                const pdfjs = await import(OSS + 'pdf.min.mjs');
+                try {
+                    const wResp = await fetch(OSS + 'pdf.worker.min.mjs');
+                    if (wResp.ok) {
+                        pdfjs.GlobalWorkerOptions.workerSrc = URL.createObjectURL(await wResp.blob());
+                    }
+                } catch (e) { /* worker 加载失败时 pdf.js 自动回退主线程解析 */ }
+                const doc = await pdfjs.getDocument({ url: pdfUrl, rangeChunkSize: 65536 }).promise;
                 pdfDoc = doc;
                 pageCount = doc.numPages;
                 status.style.display = 'none';
